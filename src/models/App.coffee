@@ -5,4 +5,5 @@ class window.App extends Backbone.Model
     @set 'deck', deck = new Deck()
     @set 'playerHand', deck.dealPlayer()
     @set 'dealerHand', deck.dealDealer()
-
+    @set 'playerMoney', new Bet({amount: 500})
+    @set 'betMoney', new Bet()

@@ -1,7 +1,12 @@
 class window.CardView extends Backbone.View
   className: 'card'
 
-  template: _.template '<%= rankName %> of <%= suitName %>'
+  imageSrc: -> 
+    suitName = @model.get 'suitName'
+    rankName = @model.get 'rankName'
+    rankName + "-" + suitName.toLowerCase() + ".png"
+
+  template: _.template ''
 
   initialize: -> @render()
 
@@ -9,4 +14,6 @@ class window.CardView extends Backbone.View
     @$el.children().detach()
     @$el.html @template @model.attributes
     @$el.addClass 'covered' unless @model.get 'revealed'
-
+    isRevealed = @model.get 'revealed'
+    if isRevealed 
+      @$el.css({"background-image": "url('img/cards/"+@imageSrc()+"')"})

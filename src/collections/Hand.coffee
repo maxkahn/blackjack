@@ -2,8 +2,8 @@ class window.Hand extends Backbone.Collection
   model: Card
 
   initialize: (array, @deck, @isDealer) ->
-    if @isDealer
-      @on('stand', this.dealerPlay, @)
+    # if @isDealer
+    #   @on('stand', this.dealerPlay, @)
 
   hit: ->
     @add(@deck.pop())
@@ -21,6 +21,7 @@ class window.Hand extends Backbone.Collection
   dealerPlay: ->
     while @minScore() <= 17
       @hit()
+
 
   scores: ->
     # The scores are an array of potential scores.

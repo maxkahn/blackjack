@@ -1,16 +1,27 @@
 .card {
   float: left;
   border: solid 1px black;
-  width: 100px;
+  width: 120px;
   border-radius: 5px;
-  height: 140px;
+  height: 167px;
   margin-right: 20px;
 }
 
 .covered {
-  background-color: black;
+  background-image: url('../img/card-back.png');
 }
 
 .hand {
   overflow: auto;
 }
+
+
+.player-money-container, .player-bet-container{
+  border: solid 1px black;
+  width: 300px;
+  height: 100px;
+  border-radius: 5px;
+  padding: 20px;
+  margin: 10px;
+}
+
