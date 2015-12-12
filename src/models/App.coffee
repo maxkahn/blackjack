@@ -8,3 +8,4 @@ class window.App extends Backbone.Model
     @set 'playerMoney', new Bet({amount: 500})
     @set 'betMoney', new Bet()
     @set 'winMultiplier', 2
+    @set 'betOpen', true

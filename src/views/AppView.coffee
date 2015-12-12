@@ -9,7 +9,9 @@ class window.AppView extends Backbone.View
   '
 
   events:
-    'click .hit-button': -> @model.get('playerHand').hit()
+    'click .hit-button': -> 
+      @model.get('playerHand').hit()
+      @model.set 'betOpen', false
     'click .stand-button': -> 
       @model.get('dealerHand').dealerPlay()
 
@@ -28,14 +30,10 @@ class window.AppView extends Backbone.View
       else
         playerWins = false
 
-      playerMoneyModel = @model.get('playerMoney')
-      betMoneyModel = @model.get('betMoney')
-      playerMoney = playerMoneyModel.get('amount')
-      betMoney = betMoneyModel.get('amount')
       multiplier = @model.get('winMultiplier')
-      if playerWins
-        playerMoneyModel.set 'amount', playerMoney + (betMoney * multiplier)
-      betMoneyModel.set('amount', 0)
+      @model.get('playerMoney').finishBet(playerWins, @model.get('betMoney').get('amount'), multiplier)
+      @model.get('betMoney').set('amount', 0)
+
 
       if playerWins
         console.log 'Player wins!'
@@ -47,25 +45,30 @@ class window.AppView extends Backbone.View
         $('.loss').text('You lose')
 
     'click .new-game-button': ->
-      deck = new Deck()
-      @model.set 'deck', deck
+      deck = @model.get('deck')
+      if @model.get('deck').length < 10
+        deck = new Deck()
+        @model.set 'deck', deck
       @model.set 'playerHand', deck.dealPlayer()
       @model.set 'dealerHand', deck.dealDealer()
       @render()
       $('.end-game-message').removeClass('win loss').addClass('end-game-message')
+      @model.set 'betOpen', true
 
     'click .add-button': -> 
-      playerMoney = @model.get 'playerMoney'
-      betMoney = @model.get 'betMoney'
-      if 0 < playerMoney.get 'amount'
-        betMoney.increase()
-        playerMoney.decrease()
+      if @model.get('betOpen')
+        playerMoney = @model.get 'playerMoney'
+        betMoney = @model.get 'betMoney'
+        if 0 < playerMoney.get 'amount'
+          betMoney.increase()
+          playerMoney.decrease()
     'click .remove-button': -> 
-      playerMoney = @model.get 'playerMoney'
-      betMoney = @model.get 'betMoney'
-      if 0 < betMoney.get 'amount'
-        playerMoney.increase()
-        betMoney.decrease()
+      if @model.get('betOpen')
+        playerMoney = @model.get 'playerMoney'
+        betMoney = @model.get 'betMoney'
+        if 0 < betMoney.get 'amount'
+          playerMoney.increase()
+          betMoney.decrease()
 
   initialize: ->
     @render()
