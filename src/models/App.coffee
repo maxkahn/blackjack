@@ -7,3 +7,4 @@ class window.App extends Backbone.Model
     @set 'dealerHand', deck.dealDealer()
     @set 'playerMoney', new Bet({amount: 500})
     @set 'betMoney', new Bet()
+    @set 'winMultiplier', 2

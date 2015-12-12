@@ -1,6 +1,7 @@
 class window.AppView extends Backbone.View
   template: _.template '
-    <button class="hit-button">Hit</button> <button class="stand-button">Stand</button>
+    <button class="hit-button">Hit</button> <button class="stand-button">Stand</button> <button class="new-game-button">New Game</button>
+    <div class = "end-game-message"></div>
     <div class="player-hand-container"></div>
     <div class="dealer-hand-container"></div>
     <div class="player-money-container"></div>
@@ -15,26 +16,56 @@ class window.AppView extends Backbone.View
       playerScore = @model.get('playerHand').stand()
       dealerScore = @model.get('dealerHand').stand()
 
+      playerWins = false
       if playerScore > 21
-        console.log 'Dealer wins'
+        playerWins = false
       else if dealerScore > 21
-        console.log 'Player wins'
+        playerWins = true
       else if playerScore == dealerScore
-        console.log 'its a tie'
+        playerWins = false
       else if playerScore > dealerScore
-        console.log 'Player wins'
+        playerWins = true
+      else
+        playerWins = false
+
+      playerMoneyModel = @model.get('playerMoney')
+      betMoneyModel = @model.get('betMoney')
+      playerMoney = playerMoneyModel.get('amount')
+      betMoney = betMoneyModel.get('amount')
+      multiplier = @model.get('winMultiplier')
+      if playerWins
+        playerMoneyModel.set 'amount', playerMoney + (betMoney * multiplier)
+      betMoneyModel.set('amount', 0)
+
+      if playerWins
+        console.log 'Player wins!'
+        $('.end-game-message').removeClass('end-game-message').addClass('win')
+        $('.win').text('You Win')
       else
         console.log 'Dealer wins'
+        $('.end-game-message').removeClass('end-game-message').addClass('loss')
+        $('.loss').text('You lose')
+
+    'click .new-game-button': ->
+      deck = new Deck()
+      @model.set 'deck', deck
+      @model.set 'playerHand', deck.dealPlayer()
+      @model.set 'dealerHand', deck.dealDealer()
+      @render()
+      $('.end-game-message').removeClass('win loss').addClass('end-game-message')
+
     'click .add-button': -> 
       playerMoney = @model.get 'playerMoney'
       betMoney = @model.get 'betMoney'
-      betMoney.increase()
-      playerMoney.decrease()
+      if 0 < playerMoney.get 'amount'
+        betMoney.increase()
+        playerMoney.decrease()
     'click .remove-button': -> 
       playerMoney = @model.get 'playerMoney'
       betMoney = @model.get 'betMoney'
-      playerMoney.increase()
-      betMoney.decrease()
+      if 0 < betMoney.get 'amount'
+        playerMoney.increase()
+        betMoney.decrease()
 
   initialize: ->
     @render()

@@ -25,3 +25,22 @@
   margin: 10px;
 }
 
+.end-game-message {
+  margin-top: 5px;
+  width: 0px;
+  height: 0px;
+}
+
+.win {
+  margin-top: 5px;
+  width: 200px;
+  height: 50px;
+  background-color: green;
+}
+
+.loss {
+  margin-top: 5px;
+  width: 200px;
+  height: 50px;
+  background-color: red;
+}
