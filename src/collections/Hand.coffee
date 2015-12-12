@@ -2,6 +2,8 @@ class window.Hand extends Backbone.Collection
   model: Card
 
   initialize: (array, @deck, @isDealer) ->
+    if @isDealer
+      @on('stand', this.dealerPlay, @)
 
   hit: ->
     @add(@deck.pop())
@@ -15,6 +17,10 @@ class window.Hand extends Backbone.Collection
   minScore: -> @reduce (score, card) ->
     score + if card.get 'revealed' then card.get 'value' else 0
   , 0
+
+  dealerPlay: ->
+    while @minScore() <= 17
+      @hit()
 
   scores: ->
     # The scores are an array of potential scores.

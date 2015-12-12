@@ -8,15 +8,21 @@ class window.AppView extends Backbone.View
   events:
     'click .hit-button': -> @model.get('playerHand').hit()
     'click .stand-button': -> 
+      @model.get('dealerHand').trigger('stand')
+
       playerScore = @model.get('playerHand').stand()
       dealerScore = @model.get('dealerHand').stand()
-      if playerScore > dealerScore and playerScore <= 21
-        alert 'Player wins'
-      else
-        alert 'Dealer wins'
 
-      @model = new App()
-      @render()
+      if playerScore > 21
+        console.log 'Dealer wins'
+      else if dealerScore > 21
+        console.log 'Player wins'
+      else if playerScore == dealerScore
+        console.log 'its a tie'
+      else if playerScore > dealerScore
+        console.log 'Player wins'
+      else
+        console.log 'Dealer wins'
 
   initialize: ->
     @render()

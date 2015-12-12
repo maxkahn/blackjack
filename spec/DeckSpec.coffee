@@ -8,6 +8,17 @@ describe 'deck', ->
     deck = new Deck()
     hand = deck.dealPlayer()
 
+  describe 'constructor', ->
+    it 'should have 4 cards of any rank', ->
+      deck = new Deck()
+      tens = deck.filter((card) -> 10 is card.get 'rankName')
+      assert.strictEqual tens.length, 4  
+
+    it 'should have 13 cards of any suit', ->
+      deck = new Deck()
+      hearts = deck.filter((card) -> 'Hearts' is card.get 'suitName')
+      assert.strictEqual hearts.length, 13
+
   describe 'hit', ->
     it 'should give the last card from the deck', ->
       assert.strictEqual deck.length, 50
