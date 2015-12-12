@@ -4,8 +4,10 @@ class window.AppView extends Backbone.View
     <div class = "end-game-message"></div>
     <div class="player-hand-container"></div>
     <div class="dealer-hand-container"></div>
-    <div class="player-money-container"></div>
-    <div class="player-bet-container"></div>
+    <div class="bet-container">
+      <div class="player-money-container"></div>
+      <div class="player-bet-container"></div>
+    </div>
   '
 
   events:
@@ -38,11 +40,11 @@ class window.AppView extends Backbone.View
       if playerWins
         console.log 'Player wins!'
         $('.end-game-message').removeClass('end-game-message').addClass('win')
-        $('.win').text('You Win')
+        $('.win').text('You Win!')
       else
         console.log 'Dealer wins'
         $('.end-game-message').removeClass('end-game-message').addClass('loss')
-        $('.loss').text('You lose')
+        $('.loss').text('You Lose!')
 
     'click .new-game-button': ->
       deck = @model.get('deck')

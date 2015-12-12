@@ -19,9 +19,12 @@ class window.Hand extends Backbone.Collection
   , 0
 
   dealerPlay: ->
+    @each (card) ->
+      if not card.get 'revealed'
+        card.flip()
+
     while @minScore() <= 17
       @hit()
-
 
   scores: ->
     # The scores are an array of potential scores.
@@ -30,10 +33,6 @@ class window.Hand extends Backbone.Collection
     [@minScore(), @minScore() + 10 * @hasAce()]
 
   stand: -> 
-    @each (card) ->
-      if not card.get 'revealed'
-        card.flip()
-
     finalScores = @scores()
 
     result = finalScores[0]
