@@ -69,3 +69,24 @@ body {
   background-color: #FF9999;
   padding: 10px;
 }
+
+
+.history-container {
+  display: inline-block;
+  font-size: 18px;
+  background-color: #B8B8B8;
+}
+
+.history-container td div {
+  height: 50px;
+  width: 30px;
+}
+
+table {
+  font-size: 18px;
+}
+
+table, th, td {
+  border: 1px solid black;
+  text-align: center;
+}
