@@ -9,3 +9,4 @@ class window.App extends Backbone.Model
     @set 'betMoney', new Bet()
     @set 'winMultiplier', 2
     @set 'betOpen', true
+    @set 'historyGames', new HistoryGames()

@@ -1,3 +1,6 @@
+window.playerWins = false
+window.betMoneyAmount = 0
+
 class window.AppView extends Backbone.View
   template: _.template '
     <button class="hit-button">Hit</button> <button class="stand-button">Stand</button> <button class="new-game-button">New Game</button>
@@ -8,6 +11,7 @@ class window.AppView extends Backbone.View
       <div class="player-money-container"></div>
       <div class="player-bet-container"></div>
     </div>
+    <div class="history-container"></div>
   '
 
   events:
@@ -31,11 +35,15 @@ class window.AppView extends Backbone.View
         playerWins = true
       else
         playerWins = false
+      window.playerWins = playerWins
 
       multiplier = @model.get('winMultiplier')
       @model.get('playerMoney').finishBet(playerWins, @model.get('betMoney').get('amount'), multiplier)
+      if playerWins
+        window.betMoneyAmount = @model.get('betMoney').get('amount') * multiplier
+      else
+        window.betMoneyAmount = @model.get('betMoney').get('amount')
       @model.get('betMoney').set('amount', 0)
-
 
       if playerWins
         console.log 'Player wins!'
@@ -47,6 +55,9 @@ class window.AppView extends Backbone.View
         $('.loss').text('You Lose!')
 
     'click .new-game-button': ->
+      tmpPlayerHand = @model.get('playerHand').clone()
+      tmpDealerHand = @model.get('dealerHand').clone()
+      
       deck = @model.get('deck')
       if @model.get('deck').length < 10
         deck = new Deck()
@@ -56,6 +67,8 @@ class window.AppView extends Backbone.View
       @render()
       $('.end-game-message').removeClass('win loss').addClass('end-game-message')
       @model.set 'betOpen', true
+
+      @model.get('historyGames').add(new Game({playerHand: tmpPlayerHand, dealerHand: tmpDealerHand, score: window.betMoneyAmount, win: window.playerWins}))
 
     'click .add-button': -> 
       if @model.get('betOpen')
@@ -82,3 +95,5 @@ class window.AppView extends Backbone.View
     @$('.dealer-hand-container').html new HandView(collection: @model.get 'dealerHand').el
     @$('.player-money-container').html new MoneyView(model: @model.get 'playerMoney').el
     @$('.player-bet-container').html new BetView(model: @model.get 'betMoney').el
+    @$('.history-container').html new HistoryGamesView(collection: @model.get 'historyGames').el
+
